@@ -1,4 +1,5 @@
-# gertboard_wiring-pi_examples
-Javascript examples for Raspberry Pi using Node and the wiring-pi node module to access Gertboard I/O ports
+rpi-webapp-gpio
 
-tested
+A web API for the Raspberry Pi using Node, and the express and  wiring-pi node modules to access Gertboard I/O ports
+
+tested successfully 
