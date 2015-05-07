@@ -25,13 +25,10 @@ var gpio      = require('./gpio');
 var app       = express();
 
 
-// dummy input port values for our example
-// var inputs = [    { pin: '11', gpio: '17', value: 1 },
-//                  { pin: '12', gpio: '18', value: 0 }
-//                ];
-
-var pin1 = 4; // GPIO chip pin 4 = Header pin GPIO23
-var pin2 = 6; // = Header pin 25
+// input port objects for our example
+var inputs = [    { pin: '4', gpio: '23', value: null },
+                  { pin: '6', gpio: '25', value: null }
+                ];
 
 
 gpio.init();
@@ -44,13 +41,13 @@ app.use(express.static(__dirname));
 // Express route for incoming requests for a single input
 app.get('/inputs/:id', function (req, res) {
   // send an object as a JSON string
-  console.log('id = ' + req.params.id);
-  if (req.params.id === pin1) {
-    res.send(gpio.readInput(pin1));
-  } else if (req.params.id === pin2) {
-    res.send(gpio.readInput(pin2));
+  console.log('received API request for pin id = ' + req.params.id);
+
+  if ((req.params.id === inputs[0].pin) || (req.params.id === inputs[1].pin)) {
+    inputs[req.params.id].value = gpio.readInput(req.params.id);
+    res.send(inputs[req.params.id]);
   } else {
-    res.send('dont recognise that pin number ' + req.params.id);
+    res.send('dont recognise that input reference ' + req.params.id);
   }
 }); // apt.get()
 
