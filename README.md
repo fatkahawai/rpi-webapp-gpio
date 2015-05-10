@@ -13,10 +13,11 @@ myapi.js is the Node.JS application. its an http server which serves html and js
 to start, download the source files into a new directory on the RPi, 
 install the node modules required 
 npm install express
-npm install wirting-pi
+npm install wiring-pi
 
-and finally, run the application by starting node with the myapi.js file as argument
-    > node myapi.js
+and finally, run the application by starting node with the myapi.js file as argument.
+(you must run this with root priviledges to be able to access the GPIO)
+  $ sudo node myapi.js
 
 this starts the http server on localthost using port 3000
 

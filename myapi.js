@@ -31,8 +31,8 @@ var inputs = [    { pin: '4', gpio: '23', value: null },
                 ];
 
 
-  gpio.init();
-  console.log('wiring-pi initialised');
+gpio.init();
+console.log('wiring-pi initialised');
 
 // ------------------------------------------------------------------------
 // configure Express to serve index.html and any other static pages stored 
@@ -45,31 +45,32 @@ app.get('/inputs/:id', function (req, res) {
     pin;
 
   pin = req.params.id;
+  console.log('received API request for pin number ' + pin);
 
-  // send an object as a JSON string
-  console.log('received API request for pin id = ' + pin);
-
-  for( i in inputs ) {
+  for (i in inputs) {
     if ((pin === inputs[i].pin)) {
-      console.log('valid Id');
-      value = gpio.readInput(Number(pin));
+      value = gpio.readInput(Number(pin));  // readInput needs a number
       console.log('value = ' + value);
-      inputs[i].value = value.toString();
+
+      // update the inputs object
+      inputs[i].value = value.toString(); // store value as a string
+
+      // send to client an inputs object as a JSON string
       res.send(inputs[i]);
       return;
     }
   } // for
 
-  console.log('invalid input Id');
-  res.status(403).send('dont recognise that input reference ' + pinString);
+  console.log('invalid input pin');
+  res.status(403).send('dont recognise that input reference ' + pin);
 }); // apt.get()
 
 // Express route for incoming requests for a list of all inputs
-// app.get('/inputs', function (req, res) {
-// send an object as a JSON string
-//  console.log('all inputs');
-//  res.status(200).send(inputs);
-// }); // apt.get()
+app.get('/inputs', function (req, res) {
+  // send array of inputs objects as a JSON string
+  console.log('all inputs');
+  res.status(200).send(inputs);
+}); // apt.get()
 
 // Express route for any other unrecognised incoming requests
 app.get('*', function (req, res) {

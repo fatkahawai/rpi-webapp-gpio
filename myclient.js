@@ -2,27 +2,32 @@
  * MYCLIENT.JS
  * an example web app using an ajax request to our API server which returns a JSON object 
  * 
- * When a user opens index.html it then loads and executes this JavaScript code
+ * When a user opens index.html it then loads and executes this JavaScript code, which reads 
+ * the current logic level on the input ports, and displays that in the window, each in a div 
+ * identified by the index "inputs_[port number]"
  */
 
 window.onload = function () {
   var url,
     i,
-    pins = [4, 6];
+    ports = [4, 6];  // the GPIO ports we will read
 
-  for (i in pins) {
-    $('#input_' + pins[i]).html('loading pin ' + pins[i] + ' value...');
+  for (i in ports) {
+    $('#input_' + ports[i]).html('loading port ' + ports[i] + ' value...');
   }
 
-  for (i in pins) {
-    url = document.URL + 'inputs/' + pins[i];
-    console.log('making API call ' + url);
+  setInterval( function () {
+    for (i in ports) {
+      url = document.URL + 'inputs/' + ports[i];
+      console.log('making API call ' + url);
 
-    $.getJSON(url, function (data) {
-      console.log('API response received. pin = ' + data.pin + ', value = ' + data.value);
-      $('#input_' + data.pin).html('GPIO input pin ' + data.pin + ' has current value of ' + data.value);
-    }); //getJSON
-  } // for
+      $.getJSON(url, function (data) {
+        console.log('API response received. pin = ' + data.pin + ', value = ' + data.value);
+        $('#input_' + data.pin).html('GPIO input port ' + data.pin + ' value is ' + data.value);
+      });
+    } // for 
+  }, 1000); // setInterval
+  
 }; //onload
 
 

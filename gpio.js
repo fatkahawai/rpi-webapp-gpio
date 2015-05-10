@@ -18,8 +18,6 @@ var gpio = {},
 
 gpio.init = function () {
   wpi.setup('wpi');
-//  wpi.pinMode(4, wpi.INPUT);
-//  wpi.pinMode(6, wpi.INPUT);
 
   if (debugMode){
     console.log('gpio.init() wiring-pi initialised');
@@ -27,7 +25,8 @@ gpio.init = function () {
 };
 
 /*
- * @arg pin = pin # on the GPIO chip. E.g.: pin 4 = RPi Header pin 23, pin 6 = Header 25
+ * Read input pin #
+ * pin = pin # on the GPIO chip. E.g.: pin 4 = RPi Header pin 23, pin 6 = Header 25
  */
 gpio.readInput = function (pin) {
   var value;
@@ -36,7 +35,6 @@ gpio.readInput = function (pin) {
     console.log('gpio.readInput(' + pin + ')');
   }
   wpi.pinMode(pin, wpi.INPUT);
-  console.log('pin mode set to input');
 
   value = wpi.digitalRead(pin);
 
