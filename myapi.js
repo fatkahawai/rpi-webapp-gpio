@@ -31,7 +31,8 @@ var inputs = [    { pin: '4', gpio: '23', value: null },
                 ];
 
 
-gpio.init();
+  gpio.init();
+  console.log('wiring-pi initialised');
 
 // ------------------------------------------------------------------------
 // configure Express to serve index.html and any other static pages stored 
@@ -40,15 +41,27 @@ app.use(express.static(__dirname));
 
 // Express route for incoming requests for a single input
 app.get('/inputs/:id', function (req, res) {
-  // send an object as a JSON string
-  console.log('received API request for pin id = ' + req.params.id);
+  var value,
+    pin;
 
-  if ((req.params.id === inputs[0].pin) || (req.params.id === inputs[1].pin)) {
-    inputs[req.params.id].value = gpio.readInput(req.params.id);
-    res.send(inputs[req.params.id]);
-  } else {
-    res.send('dont recognise that input reference ' + req.params.id);
-  }
+  pin = req.params.id;
+
+  // send an object as a JSON string
+  console.log('received API request for pin id = ' + pin);
+
+  for( i in inputs ) {
+    if ((pin === inputs[i].pin)) {
+      console.log('valid Id');
+      value = gpio.readInput(Number(pin));
+      console.log('value = ' + value);
+      inputs[i].value = value.toString();
+      res.send(inputs[i]);
+      return;
+    }
+  } // for
+
+  console.log('invalid input Id');
+  res.status(403).send('dont recognise that input reference ' + pinString);
 }); // apt.get()
 
 // Express route for incoming requests for a list of all inputs

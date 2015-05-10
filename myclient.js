@@ -7,20 +7,20 @@
 
 window.onload = function () {
   var url,
-    i = 0,
+    i,
     pins = [4, 6];
 
-  for (i = 0; i < 2; i++) {
-    $('#input_' + i).html('loading pin ' + pins[i] + '...');
+  for (i in pins) {
+    $('#input_' + pins[i]).html('loading pin ' + pins[i] + ' value...');
   }
 
-  for (i = 0; i < 2; i++) {
-    url = document.URL + '?inputs/' + pins[i];
+  for (i in pins) {
+    url = document.URL + 'inputs/' + pins[i];
     console.log('making API call ' + url);
 
     $.getJSON(url, function (data) {
-      console.log('API response received');
-      $('#input_' + i).html('GPIO input pin ' + 4 + ' has current value of ' + data.value);
+      console.log('API response received. pin = ' + data.pin + ', value = ' + data.value);
+      $('#input_' + data.pin).html('GPIO input pin ' + data.pin + ' has current value of ' + data.value);
     }); //getJSON
   } // for
 }; //onload
