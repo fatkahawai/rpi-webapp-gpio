@@ -10,7 +10,7 @@
 window.onload = function () {
   var url,
     i,
-    ports = [4, 6];  // the GPIO ports we will read
+    ports = [16, 22];  // the GPIO ports we will read
 
   for (i in ports) {
     $('#input_' + ports[i]).html('loading port ' + ports[i] + ' value...');
@@ -22,8 +22,8 @@ window.onload = function () {
       console.log('making API call ' + url);
 
       $.getJSON(url, function (data) {
-        console.log('API response received. pin = ' + data.pin + ', value = ' + data.value);
-        $('#input_' + data.pin).html('GPIO input port ' + data.pin + ' value is ' + data.value);
+        console.log('API response received. port ' + data.gpio + ' value = ' + data.value);
+        $('#input_' + data.pin).html('GPIO input port ' + data.gpio + ' value is ' + data.value);
       });
     } // for 
   }, 1000); // setInterval

@@ -11,17 +11,22 @@
  * @author Bob Drummond
  * (C) 2015 PINK PELICAN NZ LTD
  */
-var wpi = require('wiring-pi');
+var wpi = require('pi-gpio');
 
 var gpio = {},
   debugMode = true;
 
 gpio.init = function () {
-  wpi.setup('wpi');
 
-  if (debugMode){
-    console.log('gpio.init() wiring-pi initialised');
-  }
+  gpio.open(gpioPin, "input", function (err) {
+
+    if (err) {
+      throw err;
+    }
+    if (debugMode){
+      console.log('gpio.init() GPIO initialised');
+    }
+  });
 };
 
 /*
