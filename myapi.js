@@ -29,15 +29,38 @@ var inputs = [    { pin: '16', gpio: '23', value: null },
                   { pin: '22', gpio: '25', value: null }
                 ];
 
+// -----------------------------------------------------------------------
+// open GPIO ports
 var i;
 for (i in inputs) {
+  console.log('opening GPIO port ' + inputs[i].gpio + ' on pin ' + inputs[i].pin + ' as input');
   gpio.open(inputs[i].pin, "input", function (err) {
     if (err) {
       throw err;
     }
-    console.log('GPIO port ' + inputs[i].gpio + ' is open as input');
   }); // gpio.open
 } // if
+
+// ------------------------------------------------------------------------
+// read and store the GPIO inputs twice a second
+setInterval( function () {
+  gpio.read(inputs[0].pin, function (err, value) {
+    if (err) {
+      throw err;
+    }
+    console.log('read pin ' + inputs[0].pin + ' value = ' + value);
+    // update the inputs object
+    inputs[0].value = value.toString(); // store value as a string
+  });
+
+  gpio.read(inputs[1].pin, function (err, value) {
+    if (err) {
+      throw err;
+    }
+    console.log('read pin ' + inputs[1].pin + ' value = ' + value);
+    inputs[1].value = value.toString();
+  });
+}, 500); // setInterval
 
 // ------------------------------------------------------------------------
 // configure Express to serve index.html and any other static pages stored 
@@ -46,32 +69,20 @@ app.use(express.static(__dirname));
 
 // Express route for incoming requests for a single input
 app.get('/inputs/:id', function (req, res) {
-  var value = 0,
-    pin, i;
+  var i;
 
-  pin = req.params.id;
-  console.log('received API request for pin number ' + pin);
-
-  for (i in inputs) {
-    if ((pin === inputs[i].pin)) {
-      gpio.read(gpioPin, function (err, value) {
-        if (err) {
-          throw err;
-        }
-        console.log('value = ' + value);
-      });
-
-      // update the inputs object
-      inputs[i].value = value.toString(); // store value as a string
-
+  console.log('received API request for port number ' + req.params.id);
+  
+  for (i in inputs){
+    if ((req.params.id === inputs[i].gpio)) {
       // send to client an inputs object as a JSON string
       res.send(inputs[i]);
       return;
     }
   } // for
 
-  console.log('invalid input pin');
-  res.status(403).send('dont recognise that input reference ' + pin);
+  console.log('invalid input port');
+  res.status(403).send('dont recognise that input port number ' + req.params.id);
 }); // apt.get()
 
 // Express route for incoming requests for a list of all inputs
@@ -94,6 +105,18 @@ app.use(function (err, req, res, next) {
     next(err);
   }
 }); // apt.use()
+
+process.on('SIGINT', function() {
+  var i;
+
+  console.log("\nGracefully shutting down from SIGINT (Ctrl+C)");
+
+  console.log("closing GPIO...");
+  for (i in inputs) {
+    gpio.close(inputs[i].pin);
+  }
+  process.exit();
+});
 
 // ------------------------------------------------------------------------
 // Start Express App Server
