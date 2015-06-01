@@ -35,7 +35,7 @@ for (i in inputs) {
     if (err) {
       throw err;
     }
-    console.log('GPIO ports ' + inputs[i].gpio + ' is open as input');
+    console.log('GPIO port ' + inputs[i].gpio + ' is open as input');
   }); // gpio.open
 } // if
 
