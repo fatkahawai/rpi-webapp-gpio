@@ -20,7 +20,7 @@
 
 var http      = require('http');
 var express   = require('express');
-var gpio      = require('pi-gpio');
+// var gpio      = require('pi-gpio');
 
 var app       = express();
 
@@ -31,36 +31,36 @@ var inputs = [    { pin: '16', gpio: '23', value: null },
 
 // -----------------------------------------------------------------------
 // open GPIO ports
-var i;
-for (i in inputs) {
-  console.log('opening GPIO port ' + inputs[i].gpio + ' on pin ' + inputs[i].pin + ' as input');
-  gpio.open(inputs[i].pin, "input", function (err) {
-    if (err) {
-      throw err;
-    }
-  }); // gpio.open
-} // if
+// var i;
+// for (i in inputs) {
+//   console.log('opening GPIO port ' + inputs[i].gpio + ' on pin ' + inputs[i].pin + ' as input');
+//   gpio.open(inputs[i].pin, "input", function (err) {
+//     if (err) {
+//       throw err;
+//     }
+//   }); // gpio.open
+// } // if
 
 // ------------------------------------------------------------------------
 // read and store the GPIO inputs twice a second
-setInterval( function () {
-  gpio.read(inputs[0].pin, function (err, value) {
-    if (err) {
-      throw err;
-    }
-    console.log('read pin ' + inputs[0].pin + ' value = ' + value);
-    // update the inputs object
-    inputs[0].value = value.toString(); // store value as a string
-  });
+// setInterval( function () {
+//   gpio.read(inputs[0].pin, function (err, value) {
+//     if (err) {
+//       throw err;
+//     }
+//     console.log('read pin ' + inputs[0].pin + ' value = ' + value);
+//     // update the inputs object
+//     inputs[0].value = value.toString(); // store value as a string
+//   });
 
-  gpio.read(inputs[1].pin, function (err, value) {
-    if (err) {
-      throw err;
-    }
-    console.log('read pin ' + inputs[1].pin + ' value = ' + value);
-    inputs[1].value = value.toString();
-  });
-}, 500); // setInterval
+//   gpio.read(inputs[1].pin, function (err, value) {
+//     if (err) {
+//       throw err;
+//     }
+//     console.log('read pin ' + inputs[1].pin + ' value = ' + value);
+//     inputs[1].value = value.toString();
+//   });
+// }, 500); // setInterval
 
 // ------------------------------------------------------------------------
 // configure Express to serve index.html and any other static pages stored 

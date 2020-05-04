@@ -1,0 +1,24 @@
+{
+  "name": "rpi-webapp-gpio",
+  "version": "1.0.0",
+  "description": "README.MD",
+  "main": "myapi.js",
+  "dependencies": {
+    "pi-gpio": "^0.0.8",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/grpecunia/rpi-webapp-gpio.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/grpecunia/rpi-webapp-gpio/issues"
+  },
+  "homepage": "https://github.com/grpecunia/rpi-webapp-gpio#readme"
+}
